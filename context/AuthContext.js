@@ -364,6 +364,39 @@ export function AuthProvider({ children }) {
   }, []);
 
   /**
+   * تسجيل الدخول باستخدام مزود خارجي (OAuth مثل Google)
+   */
+  const signInWithOAuth = useCallback(async (provider) => {
+    setAuthError(null);
+    const supabase = getSupabaseBrowserClient();
+
+    if (!supabase) {
+      return { success: false, error: 'خدمة المصادقة غير مهيأة' };
+    }
+
+    const redirectUrl = typeof window !== 'undefined'
+      ? `${window.location.origin}/api/auth/callback`
+      : `${process.env.NEXT_PUBLIC_SITE_URL || 'https://qasab-digital.vercel.app'}/api/auth/callback`;
+
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: provider.toLowerCase(),
+        options: {
+          redirectTo: redirectUrl,
+        },
+      });
+
+      if (error) {
+        setAuthError(error.message);
+        return { success: false, error: error.message };
+      }
+      return { success: true, data };
+    } catch (e) {
+      return { success: false, error: 'تعذر الاتصال بمزود الخدمة، يرجى المحاولة لاحقاً' };
+    }
+  }, []);
+
+  /**
    * 7. تسجيل الخروج الآمن (Supabase Auth signOut)
    */
   const signOut = useCallback(async () => {
@@ -409,6 +442,7 @@ export function AuthProvider({ children }) {
         verifyOtp,
         resetPasswordForEmail,
         updatePassword,
+        signInWithOAuth,
         signOut,
         loadUserProfile,
       }}

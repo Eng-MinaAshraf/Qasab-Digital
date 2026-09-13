@@ -14,10 +14,8 @@ import { updatePaymentStatus } from '../../../../lib/db';
  * https://<YOUR_DOMAIN>/api/payment/response
  */
 
-export async function GET(request) {
+async function handleResponse(searchParams, requestUrl) {
   try {
-    const { searchParams } = new URL(request.url);
-
     const receivedHmac = searchParams.get('hmac');
     const isSuccess = searchParams.get('success') === 'true' && searchParams.get('error_occured') !== 'true';
     const transactionId = searchParams.get('id');
@@ -29,7 +27,7 @@ export async function GET(request) {
     if (!isHmacValid) {
       console.warn('⚠️ [Paymob Response Callback] تم استلام توجيه بتوقيع HMAC غير صالح.');
       const errorMsg = 'تعذر التحقق من مصداقية عملية الدفع من بوابة Paymob (Invalid HMAC).';
-      return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, request.url));
+      return NextResponse.redirect(new URL(`/checkout?error=${encodeURIComponent(errorMsg)}`, requestUrl));
     }
 
     // ─── 2. التعرف على رقم طلب المتجر ──────────────────────────────────
@@ -55,7 +53,7 @@ export async function GET(request) {
         console.log(`✅ [Paymob Response Callback] تم تأكيد دفع الطلب ${merchantOrderId} عبر التوجيه المباشر.`);
       }
 
-      const successUrl = new URL('/checkout/success', request.url);
+      const successUrl = new URL('/checkout/success', requestUrl);
       if (merchantOrderId) successUrl.searchParams.set('orderId', merchantOrderId);
       if (transactionId) successUrl.searchParams.set('txnId', transactionId);
 
@@ -75,7 +73,7 @@ export async function GET(request) {
       });
     }
 
-    const failUrl = new URL('/checkout', request.url);
+    const failUrl = new URL('/checkout', requestUrl);
     failUrl.searchParams.set('error', failReason);
     if (merchantOrderId) failUrl.searchParams.set('orderId', merchantOrderId);
 
@@ -83,14 +81,45 @@ export async function GET(request) {
   } catch (err) {
     console.error('Error handling Paymob Response Callback:', err);
     return NextResponse.redirect(
-      new URL('/checkout?error=' + encodeURIComponent('حدث خطأ غير متوقع أثناء معالجة توجيه الدفع'), request.url)
+      new URL('/checkout?error=' + encodeURIComponent('حدث خطأ غير متوقع أثناء معالجة توجيه الدفع'), requestUrl)
     );
   }
+}
+
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  return handleResponse(searchParams, request.url);
 }
 
 /**
  * دعم POST في حالة تهيئة بوابة الدفع لإرسال التوجيه عبر Form Post
  */
 export async function POST(request) {
-  return GET(request);
+  try {
+    const contentType = request.headers.get('content-type') || '';
+    let params;
+
+    if (contentType.includes('application/x-www-form-urlencoded')) {
+      const formData = await request.formData();
+      params = new URLSearchParams();
+      for (const [key, value] of formData.entries()) {
+        params.append(key, value);
+      }
+    } else if (contentType.includes('application/json')) {
+      const json = await request.json();
+      params = new URLSearchParams();
+      for (const key in json) {
+        params.append(key, String(json[key]));
+      }
+    } else {
+      params = new URL(request.url).searchParams;
+    }
+
+    return handleResponse(params, request.url);
+  } catch (err) {
+    console.error('Error parsing POST Paymob callback:', err);
+    return NextResponse.redirect(
+      new URL('/checkout?error=' + encodeURIComponent('حدث خطأ غير متوقع أثناء استقبال توجيه الدفع'), request.url)
+    );
+  }
 }

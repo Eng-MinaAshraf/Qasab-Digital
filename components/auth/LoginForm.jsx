@@ -23,7 +23,7 @@ export default function LoginForm() {
   const redirectParam = searchParams.get('redirect') || searchParams.get('returnTo');
   const redirectUrl = redirectParam || '/';
 
-  const { signInWithPassword, authError } = useAuth();
+  const { signInWithPassword, signInWithOAuth, authError } = useAuth();
   const { mergeGuestCart } = useCart ? useCart() : { mergeGuestCart: () => {} };
 
   const [identifier, setIdentifier] = useState('');
@@ -76,8 +76,14 @@ export default function LoginForm() {
     }
   };
 
-  const handleSocialLogin = (provider) => {
-    setErrorMessage(`تسجيل الدخول عبر ${provider} يتطلب تفعيل OAuth في لوحة تحكم Supabase.`);
+  const handleSocialLogin = async (provider) => {
+    setErrorMessage('');
+    setLoading(true);
+    const res = await signInWithOAuth(provider);
+    if (!res.success) {
+      setErrorMessage(res.error || `تعذر بدء تسجيل الدخول باستخدام ${provider}`);
+      setLoading(false);
+    }
   };
 
   return (
