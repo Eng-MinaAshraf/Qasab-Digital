@@ -18,7 +18,7 @@ const cairo = Cairo({
 });
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://qasab-digital.vercel.app'),
   title: "قصب | عصير قصب طبيعي 100% في مصر",
   description: "طازة، طبيعية، مصرية — عصير قصب طازج يومياً من أجود مزارع القصب المصرية بأعلى معايير النظافة والجودة.",
   icons: {

@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
     ? product.image
     : product.image.replace('.jpg', '') + '.webp';
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://qasab.eg';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://qasab-digital.vercel.app';
   const canonicalUrl = `${siteUrl}/menu/${product.slug}`;
 
   return {
@@ -103,7 +103,7 @@ export default async function ProductPage({ params }) {
     .slice(0, 3);
 
   // SEO / AEO / GEO Structured Data (Zero Client-side JS overhead)
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://qasab.eg';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://qasab-digital.vercel.app';
   const productJsonLd = generateProductJsonLd(product, siteUrl);
   const breadcrumbJsonLd = generateBreadcrumbJsonLd(product, siteUrl);
 

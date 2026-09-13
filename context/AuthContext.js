@@ -319,7 +319,7 @@ export function AuthProvider({ children }) {
 
     const redirectUrl = typeof window !== 'undefined'
       ? `${window.location.origin}/reset-password`
-      : 'https://qasab.eg/reset-password';
+      : `${process.env.NEXT_PUBLIC_SITE_URL || 'https://qasab-digital.vercel.app'}/reset-password`;
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
