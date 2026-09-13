@@ -1,0 +1,482 @@
+/* ==============================================================================
+   Qasab Active Order Tracking Widget — Cup Filling & Delivery Circular Progress
+   تصميم مخصص فخم بهوية قصب المصرية الأصيلة بدون أي إيموجي
+   ============================================================================== */
+
+.qasab-tracking-widget-root {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 995;
+  font-family: var(--font-cairo), system-ui, -apple-system, sans-serif;
+  direction: rtl;
+  user-select: none;
+}
+
+/* ─── البطاقة العائمة الرئيسية ─── */
+.qasab-tracking-card {
+  width: 330px;
+  background: rgba(10, 32, 18, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(245, 214, 122, 0.35);
+  border-radius: 20px;
+  padding: 1rem 1.1rem;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.5),
+    0 0 24px rgba(22, 101, 52, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  animation: qasabCardSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
+}
+
+.qasab-tracking-card:hover {
+  border-color: rgba(245, 214, 122, 0.6);
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.6),
+    0 0 32px rgba(22, 101, 52, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+@keyframes qasabCardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ─── رأس البطاقة ─── */
+.qasab-tracking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.5rem;
+}
+
+.qasab-tracking-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.qasab-tracking-badge-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #84CC16;
+  box-shadow: 0 0 0 0 rgba(132, 204, 22, 0.7);
+  animation: qasabDotPulse 2s infinite;
+}
+
+@keyframes qasabDotPulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(132, 204, 22, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(132, 204, 22, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(132, 204, 22, 0);
+  }
+}
+
+.qasab-tracking-order-num {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #FCFAF5;
+  letter-spacing: 0.3px;
+}
+
+.qasab-tracking-close-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.qasab-tracking-close-btn:hover {
+  color: #FCFAF5;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ─── محتوى البطاقة والمؤشر ─── */
+.qasab-tracking-content {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+/* ─── Circular Progress Indicator + Cup Concept ─── */
+.qasab-cup-indicator-wrap {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qasab-circular-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.qasab-track-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 6;
+}
+
+.qasab-track-progress {
+  fill: none;
+  stroke: url(#qasabJuiceGrad);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 0 6px rgba(132, 204, 22, 0.5));
+}
+
+.qasab-cup-glass-outline {
+  fill: rgba(255, 255, 255, 0.04);
+  stroke: rgba(245, 214, 122, 0.55);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.qasab-cup-rim {
+  fill: none;
+  stroke: rgba(245, 214, 122, 0.7);
+  stroke-width: 1.4;
+}
+
+.qasab-liquid-rect {
+  transition: y 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.qasab-liquid-wave {
+  animation: qasabLiquidWave 2.8s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+@keyframes qasabLiquidWave {
+  0% {
+    transform: translateX(-2px) scaleY(0.95);
+  }
+  100% {
+    transform: translateX(2px) scaleY(1.05);
+  }
+}
+
+.qasab-bubble {
+  animation: qasabBubbleFloat 2.2s infinite ease-in-out;
+}
+
+.qasab-bubble.b2 {
+  animation-delay: 1.1s;
+}
+
+@keyframes qasabBubbleFloat {
+  0% {
+    transform: translateY(0);
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+}
+
+.qasab-indicator-center-icon {
+  position: absolute;
+  top: 14px;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FACC15;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+  pointer-events: none;
+}
+
+/* حركة المندوب / السكوتر الهادئة */
+.qasab-scooter-animated {
+  animation: qasabScooterBob 2s ease-in-out infinite;
+}
+
+@keyframes qasabScooterBob {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(-1.5deg);
+  }
+}
+
+/* ─── تفاصيل الحالة ─── */
+.qasab-tracking-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.qasab-tracking-status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.qasab-status-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.qasab-status-pct {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #A3E635;
+  background: rgba(163, 230, 53, 0.14);
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid rgba(163, 230, 53, 0.3);
+}
+
+.qasab-status-desc {
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.35;
+  margin: 0 0 0.65rem 0;
+}
+
+.qasab-btn-track-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: linear-gradient(135deg, #166534 0%, #14532D 100%);
+  border: 1px solid rgba(245, 214, 122, 0.35);
+  color: #FCFAF5;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.45rem 0.85rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.qasab-btn-track-action:hover {
+  background: linear-gradient(135deg, #15803D 0%, #166534 100%);
+  color: #FACC15;
+  border-color: rgba(245, 214, 122, 0.7);
+  transform: translateX(-2px);
+}
+
+/* ─── الزر العائم المصغر (Minimized Pill) ─── */
+.qasab-tracking-min-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(10, 32, 18, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(245, 214, 122, 0.4);
+  color: #FCFAF5;
+  padding: 0.6rem 1rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  transition: all 0.25s ease;
+}
+
+.qasab-tracking-min-btn:hover {
+  transform: translateY(-2px);
+  border-color: #FACC15;
+}
+
+.qasab-min-icon {
+  color: #A3E635;
+}
+
+.qasab-min-badge {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #FACC15;
+}
+
+/* ─── الاحتفال بالـ Confetti عند الـ 100% ─── */
+.qasab-celebration-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qasab-celebration-toast {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: rgba(10, 32, 18, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid #FACC15;
+  padding: 1.25rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(250, 204, 21, 0.4);
+  color: #FCFAF5;
+  animation: qasabToastPop 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.28);
+}
+
+@keyframes qasabToastPop {
+  0% {
+    transform: scale(0.8) translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.qasab-celebration-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.qasab-celebration-msg strong {
+  font-size: 1.15rem;
+  color: #FACC15;
+}
+
+.qasab-celebration-msg span {
+  font-size: 0.9rem;
+  color: #FCFAF5;
+}
+
+/* جزيئات الـ Confetti الفكتور الهندسية (No emojis) */
+.qasab-confetti-burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.qasab-confetti-particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  animation: qasabConfettiExplode 2.5s cubic-bezier(0.1, 1, 0.2, 1) forwards;
+}
+
+.p-0 { background: #EAB308; transform: rotate(15deg); }
+.p-1 { background: #84CC16; transform: rotate(45deg); }
+.p-2 { background: #22C55E; transform: rotate(30deg); }
+.p-3 { background: #FACC15; transform: rotate(60deg); }
+.p-4 { background: #166534; transform: rotate(75deg); }
+.p-5 { background: #FCFAF5; transform: rotate(90deg); }
+
+@keyframes qasabConfettiExplode {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--rand-x, 150px) * 1.5), calc(var(--rand-y, -120px) * 1.5)) rotate(720deg) scale(0.2);
+  }
+}
+
+/* ضبط عشوائية الجزيئات */
+.qasab-confetti-burst span:nth-child(1)  { --rand-x: -120px; --rand-y: -140px; }
+.qasab-confetti-burst span:nth-child(2)  { --rand-x: 140px;  --rand-y: -130px; }
+.qasab-confetti-burst span:nth-child(3)  { --rand-x: -80px;  --rand-y: -180px; }
+.qasab-confetti-burst span:nth-child(4)  { --rand-x: 90px;   --rand-y: -190px; }
+.qasab-confetti-burst span:nth-child(5)  { --rand-x: -160px; --rand-y: -60px; }
+.qasab-confetti-burst span:nth-child(6)  { --rand-x: 170px;  --rand-y: -70px; }
+.qasab-confetti-burst span:nth-child(7)  { --rand-x: -60px;  --rand-y: 120px; }
+.qasab-confetti-burst span:nth-child(8)  { --rand-x: 70px;   --rand-y: 110px; }
+.qasab-confetti-burst span:nth-child(9)  { --rand-x: -140px; --rand-y: 80px; }
+.qasab-confetti-burst span:nth-child(10) { --rand-x: 150px;  --rand-y: 70px; }
+.qasab-confetti-burst span:nth-child(11) { --rand-x: -100px; --rand-y: -90px; }
+.qasab-confetti-burst span:nth-child(12) { --rand-x: 110px;  --rand-y: -100px; }
+.qasab-confetti-burst span:nth-child(13) { --rand-x: -180px; --rand-y: -10px; }
+.qasab-confetti-burst span:nth-child(14) { --rand-x: 190px;  --rand-y: -20px; }
+.qasab-confetti-burst span:nth-child(15) { --rand-x: -30px;  --rand-y: -210px; }
+.qasab-confetti-burst span:nth-child(16) { --rand-x: 40px;   --rand-y: -220px; }
+.qasab-confetti-burst span:nth-child(17) { --rand-x: -130px; --rand-y: -160px; }
+.qasab-confetti-burst span:nth-child(18) { --rand-x: 120px;  --rand-y: -150px; }
+.qasab-confetti-burst span:nth-child(19) { --rand-x: -70px;  --rand-y: 90px; }
+.qasab-confetti-burst span:nth-child(20) { --rand-x: 80px;   --rand-y: 100px; }
+.qasab-confetti-burst span:nth-child(21) { --rand-x: -150px; --rand-y: 30px; }
+.qasab-confetti-burst span:nth-child(22) { --rand-x: 160px;  --rand-y: 40px; }
+.qasab-confetti-burst span:nth-child(23) { --rand-x: -90px;  --rand-y: -110px; }
+.qasab-confetti-burst span:nth-child(24) { --rand-x: 100px;  --rand-y: -120px; }
+
+/* ─── التوافق مع شاشات الموبايل ─── */
+@media (max-width: 640px) {
+  .qasab-tracking-widget-root {
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+  }
+
+  .qasab-tracking-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.85rem 1rem;
+    border-radius: 18px;
+  }
+
+  .qasab-cup-indicator-wrap {
+    width: 90px;
+    height: 90px;
+  }
+
+  .qasab-status-title {
+    font-size: 0.88rem;
+  }
+
+  .qasab-status-desc {
+    font-size: 0.72rem;
+  }
+
+  .qasab-celebration-toast {
+    padding: 1rem 1.25rem;
+    width: 90%;
+  }
+
+  .qasab-celebration-msg strong {
+    font-size: 1rem;
+  }
+
+  .qasab-celebration-msg span {
+    font-size: 0.82rem;
+  }
+}

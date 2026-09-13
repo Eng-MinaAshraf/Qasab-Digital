@@ -1,0 +1,990 @@
+/* ==========================================================================
+   متجر قصب (Qasab Juice) — نظام المصادقة المتكامل والهوية البصرية المصرية
+   ========================================================================== */
+
+:root {
+  --qasab-cream: #FCFAF5;
+  --qasab-cream-warm: #FBF8F2;
+  --qasab-cream-surface: #F5EFE6;
+  --qasab-primary: #166534;
+  --qasab-primary-dark: #14532D;
+  --qasab-primary-hover: #0f3d20;
+  --qasab-primary-light: #22C55E;
+  --qasab-lime: #84CC16;
+  --qasab-gold: #F59E0B;
+  --qasab-gold-dark: #D97706;
+  --qasab-text: #1e293b;
+  --qasab-text-muted: #475569;
+  --qasab-border: rgba(22, 101, 52, 0.12);
+  --qasab-border-focus: #166534;
+  --qasab-radius-card: 24px;
+  --qasab-radius-input: 12px;
+  --qasab-radius-btn: 14px;
+}
+
+/* ─── الحاوية الرئيسية والخلفية ─── */
+.qasab-auth-container {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-x: hidden;
+  font-family: var(--font-cairo), 'Cairo', system-ui, sans-serif;
+  color: var(--qasab-text);
+  direction: rtl;
+}
+
+.qasab-auth-bg-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.qasab-auth-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  transform: scale(1.01);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qasab-auth-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(252, 250, 245, 0.1) 0%,
+    rgba(251, 248, 242, 0.25) 55%,
+    rgba(245, 239, 230, 0.45) 100%
+  );
+  backdrop-filter: blur(1px);
+}
+
+/* ─── الشريط العلوي (Top Header) ─── */
+.qasab-auth-header {
+  position: relative;
+  z-index: 20;
+  padding: 1.25rem 2rem;
+  width: 100%;
+}
+
+.qasab-auth-header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.qasab-auth-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.qasab-auth-brand:hover {
+  transform: scale(1.02);
+}
+
+.qasab-brand-badge {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.qasab-brand-title {
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: var(--qasab-primary-dark);
+  line-height: 1;
+  letter-spacing: -0.5px;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+}
+
+.qasab-brand-sub {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--qasab-gold-dark);
+  margin-top: 1px;
+}
+
+.qasab-brand-stalks {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.qasab-switch-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.qasab-switch-hint {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--qasab-primary-dark);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
+}
+
+.qasab-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.2rem;
+  background: rgba(252, 250, 245, 0.92);
+  border: 1px solid rgba(22, 101, 52, 0.2);
+  border-radius: 9999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--qasab-primary-dark);
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.qasab-switch-btn:hover {
+  background: #ffffff;
+  border-color: var(--qasab-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(22, 101, 52, 0.12);
+}
+
+/* ─── المنطقة المركزية والبطاقة ─── */
+.qasab-auth-main {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1rem 2rem 1rem;
+  width: 100%;
+}
+
+.qasab-auth-hero {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  animation: qasabFadeInDown 0.5s ease-out;
+}
+
+.qasab-auth-hero-title {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: var(--qasab-primary-dark);
+  margin: 0 0 0.4rem 0;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.85);
+  letter-spacing: -0.5px;
+}
+
+.qasab-auth-hero-sub {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--qasab-text-muted);
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.85);
+}
+
+.qasab-gold-accent-line {
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--qasab-gold), var(--qasab-gold-dark));
+  border-radius: 99px;
+  margin: 0.75rem auto 0 auto;
+}
+
+.qasab-auth-card-wrapper {
+  width: 100%;
+  max-width: 460px;
+  animation: qasabCardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── بطاقة قصب الرخامية ─── */
+.qasab-auth-card {
+  background: var(--qasab-cream);
+  border-radius: var(--qasab-radius-card);
+  border: 1px solid var(--qasab-border);
+  box-shadow:
+    0 20px 40px -15px rgba(20, 83, 45, 0.09),
+    0 0 0 1px rgba(255, 255, 255, 0.85) inset;
+  padding: 2rem 1.85rem;
+  position: relative;
+  transition: box-shadow 0.3s ease;
+}
+
+.qasab-card-header {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.qasab-card-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--qasab-primary-dark);
+  margin: 0;
+}
+
+.qasab-card-body {
+  width: 100%;
+}
+
+/* ─── التنبيهات والأخطاء ─── */
+.qasab-alert {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: qasabFadeIn 0.3s ease;
+}
+
+.qasab-alert-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.qasab-alert-success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
+/* ─── الحقول والإدخالات ─── */
+.qasab-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.qasab-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.qasab-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--qasab-primary-dark);
+  text-align: right;
+}
+
+.qasab-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.qasab-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 1rem;
+  background: #ffffff;
+  border: 1px solid #e2ded5;
+  border-radius: var(--qasab-radius-input);
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--qasab-text);
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.qasab-input:focus {
+  border-color: var(--qasab-primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.12);
+}
+
+.qasab-input.with-start-icon {
+  padding-right: 2.75rem; /* في RTL، الأيقونة البادئة على اليمين */
+}
+
+.qasab-input.with-end-icon {
+  padding-left: 2.75rem; /* أيقونة الإظهار والإخفاء على اليسار */
+}
+
+.qasab-input-icon.start {
+  position: absolute;
+  right: 0.9rem;
+  color: #94a3b8;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qasab-input-icon.end {
+  position: absolute;
+  left: 0.9rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qasab-input-icon.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 6px;
+  color: #64748b;
+  transition: color 0.2s ease;
+}
+
+.qasab-input-icon.btn-icon:hover {
+  color: var(--qasab-primary);
+}
+
+/* ─── مدخل الهاتف المصري ─── */
+.qasab-phone-wrapper {
+  direction: ltr; /* لضبط كتابة الأرقام والمفتاح الدولي بسلاسة */
+}
+
+.qasab-phone-prefix {
+  position: absolute;
+  left: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.5rem;
+  background: #f1ede5;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--qasab-primary-dark);
+  user-select: none;
+  z-index: 2;
+}
+
+.qasab-flag {
+  font-size: 1.05rem;
+}
+
+.qasab-input.with-phone-prefix {
+  padding-left: 5.2rem;
+  padding-right: 2.75rem;
+  direction: ltr;
+  text-align: left;
+}
+
+/* ─── مؤشر قوة كلمة المرور ─── */
+.qasab-strength-meter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+  gap: 0.75rem;
+}
+
+.qasab-strength-bars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.qasab-strength-bar {
+  height: 4px;
+  flex: 1;
+  background: #e2ded5;
+  border-radius: 2px;
+  transition: background-color 0.3s ease;
+}
+
+.qasab-strength-bar.weak {
+  background: #ef4444;
+}
+
+.qasab-strength-bar.medium {
+  background: #f59e0b;
+}
+
+.qasab-strength-bar.strong {
+  background: #22c55e;
+}
+
+.qasab-strength-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.qasab-strength-label.weak {
+  color: #ef4444;
+}
+
+.qasab-strength-label.medium {
+  color: #d97706;
+}
+
+.qasab-strength-label.strong {
+  color: #166534;
+}
+
+.qasab-field-error {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #dc2626;
+  margin-top: 0.2rem;
+}
+
+/* ─── سطر الخيارات (تذكرني + نسيت كلمة المرور) ─── */
+.qasab-form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.88rem;
+}
+
+.qasab-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  color: var(--qasab-text);
+  font-weight: 600;
+  user-select: none;
+}
+
+.qasab-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--qasab-primary);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.qasab-link-muted {
+  color: var(--qasab-primary-dark);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.qasab-link-muted:hover {
+  color: var(--qasab-primary-light);
+  text-decoration: underline;
+}
+
+/* ─── اختيار نوع الحساب (عميل / بائع) ─── */
+.qasab-account-type-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.25rem 0;
+}
+
+.qasab-account-type-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.qasab-type-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0.75rem;
+  background: #ffffff;
+  border: 1.5px solid #e2ded5;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  text-align: center;
+}
+
+.qasab-type-card:hover {
+  border-color: rgba(22, 101, 52, 0.4);
+  background: #fafaf8;
+}
+
+.qasab-type-card.active {
+  border-color: var(--qasab-primary);
+  background: rgba(22, 101, 52, 0.04);
+  box-shadow: 0 0 0 1px var(--qasab-primary);
+}
+
+.qasab-check-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  color: var(--qasab-primary);
+}
+
+.qasab-type-icon {
+  color: var(--qasab-primary-dark);
+  margin-bottom: 0.35rem;
+}
+
+.qasab-type-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--qasab-primary-dark);
+}
+
+.qasab-type-desc {
+  font-size: 0.75rem;
+  color: var(--qasab-text-muted);
+  margin-top: 0.15rem;
+}
+
+.qasab-vendor-notice {
+  font-size: 0.78rem;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  margin: 0.25rem 0 0 0;
+}
+
+/* ─── الأزرار والروابط التفاعلية ─── */
+.qasab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  width: 100%;
+  height: 48px;
+  border-radius: var(--qasab-radius-btn);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.qasab-btn-primary {
+  background: var(--qasab-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(22, 101, 52, 0.25);
+}
+
+.qasab-btn-primary:hover:not(:disabled) {
+  background: var(--qasab-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(20, 83, 45, 0.35);
+}
+
+.qasab-btn-primary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.qasab-btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.qasab-btn-arrow {
+  transition: transform 0.2s ease;
+}
+
+.qasab-btn-primary:hover .qasab-btn-arrow {
+  transform: translateX(-4px); /* في RTL يتقدم لليسار */
+}
+
+/* ─── فاصل "أو" ─── */
+.qasab-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+.qasab-divider::before,
+.qasab-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e2ded5;
+}
+
+.qasab-divider span {
+  padding: 0 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+/* ─── أزرار الدخول السريع (Google / Apple) ─── */
+.qasab-social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.qasab-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  width: 100%;
+  height: 44px;
+  background: #ffffff;
+  border: 1px solid #e2ded5;
+  border-radius: var(--qasab-radius-input);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--qasab-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qasab-social-btn:hover {
+  background: #fafaf8;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+/* ─── تذييل البطاقة ─── */
+.qasab-card-footer {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--qasab-text-muted);
+  margin-top: 0.5rem;
+}
+
+.qasab-link-highlight {
+  color: var(--qasab-primary);
+  font-weight: 800;
+  text-decoration: none;
+  margin-right: 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.qasab-link-highlight:hover {
+  color: var(--qasab-primary-dark);
+  text-decoration: underline;
+}
+
+.qasab-terms-notice {
+  font-size: 0.78rem;
+  color: var(--qasab-text-muted);
+  text-align: center;
+  line-height: 1.5;
+  margin: 0.25rem 0;
+}
+
+/* ─── واجهة التحقق OTP (6 خانات) ─── */
+.qasab-otp-header {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.qasab-otp-subtitle {
+  font-size: 0.9rem;
+  color: var(--qasab-text-muted);
+  margin: 0 0 0.35rem 0;
+}
+
+.qasab-otp-email {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--qasab-primary-dark);
+  background: #f1ede5;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.qasab-otp-boxes-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  direction: ltr;
+}
+
+.qasab-otp-box {
+  width: 100%;
+  height: 52px;
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-family: inherit;
+  background: #ffffff;
+  border: 2px solid #e2ded5;
+  border-radius: 10px;
+  color: var(--qasab-primary-dark);
+  transition: all 0.2s ease;
+  outline: none;
+  padding: 0;
+}
+
+.qasab-otp-box:focus {
+  border-color: var(--qasab-primary);
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.15);
+  transform: translateY(-2px);
+}
+
+.qasab-otp-box.filled {
+  border-color: var(--qasab-primary);
+  background: #ffffff;
+}
+
+.qasab-otp-resend-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.88rem;
+  margin-top: 0.25rem;
+}
+
+.qasab-resend-countdown {
+  color: var(--qasab-text-muted);
+  font-weight: 600;
+}
+
+.qasab-btn-text {
+  background: none;
+  border: none;
+  color: var(--qasab-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 0.25rem;
+}
+
+.qasab-btn-text:hover {
+  color: var(--qasab-primary-dark);
+  text-decoration: underline;
+}
+
+/* أنيميشن اهتزاز الخطأ للـ OTP */
+@keyframes qasabShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.qasab-shake {
+  animation: qasabShake 0.5s ease-in-out;
+}
+
+/* ─── العلامة المائية على الرصيف الحجري ─── */
+.qasab-auth-watermark-area {
+  margin-top: 2rem;
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.qasab-watermark-calligraphy {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #451a03;
+  opacity: 0.72;
+  letter-spacing: 0.5px;
+  text-shadow:
+    1px 1px 0px rgba(255, 255, 255, 0.6),
+    -1px -1px 0px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transform: rotate(-1.5deg);
+}
+
+.qasab-swash {
+  font-size: 1.8rem;
+  color: var(--qasab-gold-dark);
+}
+
+.qasab-skyline-silhouette {
+  position: absolute;
+  bottom: -15px;
+  right: -20px;
+  opacity: 0.15;
+  color: #2e1065;
+}
+
+.qasab-skyline-svg {
+  width: 140px;
+  height: auto;
+}
+
+/* ─── التذييل العام (عالي الوضوح والتباين) ─── */
+.qasab-auth-footer {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 1.75rem 1rem 2.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.qasab-auth-footer-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.75rem 1.75rem;
+  background: rgba(10, 32, 18, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(245, 214, 122, 0.35);
+  border-radius: 9999px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.qasab-auth-footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #FCFAF5;
+  margin-bottom: 0;
+}
+
+.qasab-auth-footer-links a {
+  color: #FCFAF5;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.qasab-auth-footer-links a:hover {
+  color: #FACC15;
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.7);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.qasab-auth-footer-dot {
+  color: #EAB308;
+  font-weight: 900;
+  font-size: 0.95rem;
+  opacity: 0.9;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.qasab-auth-copyright {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(252, 250, 245, 0.78);
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* ─── أنيميشن الدخول الناعم ─── */
+@keyframes qasabFadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes qasabCardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes qasabFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ─── التوافق مع الشاشات المتجاوبة والموبايل ─── */
+@media (max-width: 640px) {
+  .qasab-auth-header {
+    padding: 1rem;
+  }
+
+  .qasab-auth-header-inner {
+    flex-direction: row;
+  }
+
+  .qasab-brand-title {
+    font-size: 1.5rem;
+  }
+
+  .qasab-switch-hint {
+    display: none; /* إخفاء النص التوضيحي لتوفير مساحة على الشاشات الضيقة */
+  }
+
+  .qasab-auth-hero-title {
+    font-size: 1.75rem;
+  }
+
+  .qasab-auth-hero-sub {
+    font-size: 0.92rem;
+  }
+
+  .qasab-auth-card {
+    padding: 1.5rem 1.25rem;
+    border-radius: 20px;
+  }
+
+  .qasab-otp-boxes-grid {
+    gap: 0.25rem;
+  }
+
+  .qasab-otp-box {
+    height: 44px;
+    font-size: 1.15rem;
+    border-radius: 8px;
+    border-width: 1.5px;
+  }
+
+  .qasab-auth-footer-badge {
+    padding: 0.65rem 1.1rem;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 320px;
+  }
+
+  .qasab-auth-footer-links {
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .qasab-watermark-calligraphy {
+    font-size: 1.25rem;
+  }
+}
+
+/* ─── احترام تفضيل تقليل الحركة (Reduced Motion) ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
