@@ -143,7 +143,7 @@ export default function OtpVerificationForm() {
         }, 800);
       } else {
         // محاولة التحقق كرمز سحري/تسجيل دخول
-        const loginRes = await verifyOtp(emailParam, fullToken, 'email');
+        const loginRes = await verifyOtp(emailParam, fullToken, 'magiclink');
         if (loginRes.success) {
           setSuccessMessage('تم تأكيد الدخول بنجاح! جاري تحويلك...');
           if (typeof mergeGuestCart === 'function') {

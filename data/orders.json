@@ -1,1 +1,177 @@
-[]
+[
+  {
+    "id": "QSB-2609-MSZ3",
+    "customer": {
+      "name": "Mina Ashraf",
+      "phone": "01283956913",
+      "address": "assiut\nassiut",
+      "notes": ""
+    },
+    "items": [
+      {
+        "productId": "p1",
+        "title": "قصب كلاسيك",
+        "size": "صغير",
+        "quantity": 2,
+        "unitPrice": 15,
+        "unitCost": 10,
+        "total": 30,
+        "totalCost": 20,
+        "image": "product-1.webp"
+      },
+      {
+        "productId": "p2",
+        "title": "قصب بالليمون",
+        "size": "وسط",
+        "quantity": 2,
+        "unitPrice": 25,
+        "unitCost": 12.5,
+        "total": 50,
+        "totalCost": 25,
+        "image": "product-2.webp"
+      }
+    ],
+    "subtotal": 80,
+    "deliveryFee": 15,
+    "total": 95,
+    "totalCost": 45,
+    "grossProfit": 35,
+    "paymentMethod": "paymob_card",
+    "paymentStatus": "unpaid",
+    "status": "pending",
+    "createdAt": "2026-09-14T01:23:48.076Z",
+    "idempotencyKey": "idem_1789349024757_dbbp4tl"
+  },
+  {
+    "id": "QSB-2609-I8A9",
+    "customer": {
+      "name": "Mina Ashraf",
+      "phone": "01283956913",
+      "address": "assiut\nassiut",
+      "notes": ""
+    },
+    "items": [
+      {
+        "productId": "p1",
+        "title": "قصب كلاسيك",
+        "size": "صغير",
+        "quantity": 1,
+        "unitPrice": 15,
+        "unitCost": 10,
+        "total": 15,
+        "totalCost": 10,
+        "image": "product-1.webp"
+      },
+      {
+        "productId": "p2",
+        "title": "قصب بالليمون",
+        "size": "وسط",
+        "quantity": 1,
+        "unitPrice": 25,
+        "unitCost": 12.5,
+        "total": 25,
+        "totalCost": 12.5,
+        "image": "product-2.webp"
+      }
+    ],
+    "subtotal": 40,
+    "deliveryFee": 15,
+    "total": 55,
+    "totalCost": 22.5,
+    "grossProfit": 17.5,
+    "paymentMethod": "paymob_card",
+    "paymentStatus": "unpaid",
+    "status": "cancelled",
+    "createdAt": "2026-09-14T00:29:12.568Z",
+    "idempotencyKey": "idem_1789345749753_oilz7nf",
+    "updatedAt": "2026-09-14T00:56:04.578Z"
+  },
+  {
+    "id": "QSB-2609-WPMS",
+    "customer": {
+      "name": "Mina Ashraf",
+      "phone": "01283956913",
+      "address": "assiut\nassiut",
+      "notes": ""
+    },
+    "items": [
+      {
+        "productId": "p1",
+        "title": "قصب كلاسيك",
+        "size": "صغير",
+        "quantity": 1,
+        "unitPrice": 15,
+        "unitCost": 10,
+        "total": 15,
+        "totalCost": 10,
+        "image": "product-1.webp"
+      },
+      {
+        "productId": "p2",
+        "title": "قصب بالليمون",
+        "size": "وسط",
+        "quantity": 1,
+        "unitPrice": 25,
+        "unitCost": 12.5,
+        "total": 25,
+        "totalCost": 12.5,
+        "image": "product-2.webp"
+      }
+    ],
+    "subtotal": 40,
+    "deliveryFee": 15,
+    "total": 55,
+    "totalCost": 22.5,
+    "grossProfit": 17.5,
+    "paymentMethod": "paymob_card",
+    "paymentStatus": "unpaid",
+    "status": "cancelled",
+    "createdAt": "2026-09-14T00:13:00.116Z",
+    "idempotencyKey": "idem_1789344775162_vf2n4bq",
+    "updatedAt": "2026-09-14T00:56:06.471Z"
+  },
+  {
+    "id": "QSB-2609-6WUJ",
+    "customer": {
+      "name": "Mina Ashraf",
+      "phone": "01283956913",
+      "address": "assiut\nassiut",
+      "notes": ""
+    },
+    "items": [
+      {
+        "productId": "p1",
+        "title": "قصب كلاسيك",
+        "size": "صغير",
+        "quantity": 1,
+        "unitPrice": 15,
+        "unitCost": 10,
+        "total": 15,
+        "totalCost": 10,
+        "image": "product-1.webp"
+      },
+      {
+        "productId": "p2",
+        "title": "قصب بالليمون",
+        "size": "وسط",
+        "quantity": 1,
+        "unitPrice": 25,
+        "unitCost": 12.5,
+        "total": 25,
+        "totalCost": 12.5,
+        "image": "product-2.webp"
+      }
+    ],
+    "subtotal": 40,
+    "deliveryFee": 15,
+    "total": 55,
+    "totalCost": 22.5,
+    "grossProfit": 17.5,
+    "paymentMethod": "paymob_card",
+    "paymentStatus": "unpaid",
+    "status": "cancelled",
+    "createdAt": "2026-09-14T00:08:35.390Z",
+    "idempotencyKey": "idem_1789344494312_w0siepe",
+    "updatedAt": "2026-09-14T00:56:08.196Z"
+  }
+]
