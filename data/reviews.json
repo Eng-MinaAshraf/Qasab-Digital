@@ -1,6 +1,20 @@
 {
   "qasab-classic": [
     {
+      "id": "r_1789367499924_la78",
+      "product_slug": "qasab-classic",
+      "user_id": null,
+      "name": "Test Reviewer",
+      "rating": 5,
+      "size": "وسط",
+      "comment": "This is a great product!",
+      "verified": true,
+      "is_approved": true,
+      "created_at": "2026-09-14T06:31:39.928Z",
+      "date": "الآن",
+      "createdAt": "2026-09-14T06:31:39.928Z"
+    },
+    {
       "id": "r_1789171357588_ctaq",
       "name": "أحمد النجار",
       "rating": 5,

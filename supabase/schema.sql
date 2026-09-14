@@ -250,8 +250,11 @@ CREATE POLICY "Users update own profile fields" ON public.profiles
 CREATE POLICY "Users insert own profile" ON public.profiles
     FOR INSERT WITH CHECK (
         auth.uid() = id 
-        AND role = 'customer' 
         AND account_type IN ('customer', 'vendor_pending')
+        AND (
+            role = 'customer' 
+            OR (role = 'admin' AND (auth.jwt()->>'email' IN ('admin@qasab.eg', 'qasab.digital@gmail.com', 'engminaashraf019@gmail.com')))
+        )
     );
 
 CREATE POLICY "Admins update all profiles" ON public.profiles
